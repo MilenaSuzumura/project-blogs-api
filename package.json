@@ -7,14 +7,14 @@
   "engineStrict": true,
   "private": true,
   "dependencies": {
-    "dotenv": "8.2.0",
+    "dotenv": "^8.2.0",
     "express": "4.17.1",
     "express-async-errors": "3.1.1",
     "joi": "17.6.0",
     "jsonwebtoken": "8.5.1",
     "morgan": "1.10.0",
-    "mysql2": "^2.1.0",
-    "sequelize": "^6.3.4",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.25.5",
     "shelljs": "0.8.4"
   },
   "main": "src/server.js",
@@ -43,7 +43,7 @@
     "jest": "26.0.1",
     "jest-each": "28.0.1",
     "nodemon": "2.0.15",
-    "sequelize-cli": "^6.2.0",
+    "sequelize-cli": "^6.5.2",
     "sequelize-jest-helpers-trybe": "1.0.0",
     "supertest": "4.0.2",
     "wait-on": "6.0.1"
