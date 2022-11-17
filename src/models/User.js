@@ -1,15 +1,22 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
 
-module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
-    id: DataTypes.INTEGER,
+const UserSchema = (sequelize, DataTypes) => {
+  const UserModel = sequelize.define('User', {
+    id: {
+      primaryKey: true,
+      type: DataTypes.INTEGER,
+    },
     display_name: DataTypes.STRING,
     email: DataTypes.STRING,
     password: DataTypes.STRING,
-    image: DataTypes.STRING
+    image: DataTypes.STRING,
+  }, {
+    timestamps: false,
+    tableName: 'users',
+    underscored: true,
   });
-  return User;
+
+  return UserModel;
 };
+
+module.exports = UserSchema;
