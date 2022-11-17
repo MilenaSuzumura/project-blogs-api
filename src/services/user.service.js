@@ -52,7 +52,13 @@ const cadastrar = async (info) => {
   return token;
 };
 
+const todosUsers = async () => {
+  const users = await User.findAll();
+  return users;
+};
+
 module.exports = {
   verificaParametros,
   cadastrar,
+  todosUsers,
 };
