@@ -10,7 +10,11 @@ const login = async (req, res) => {
   const { email, password } = verificaParametros;
   const verificaLogin = await loginService.verificaLogin(email, password);
 
-  return res.status(verificaLogin.status).json(verificaLogin.message);
+  if (verificaLogin.message.length !== 0) {
+    return res.status(verificaLogin.status).json({ message: verificaLogin.message });
+  }
+
+  return res.status(verificaLogin.status).json({ token: verificaLogin.token });
 };
 
 module.exports = login;

@@ -30,10 +30,10 @@ const verificaLogin = async (email, password) => {
   const resultado = {
     status: 0,
     message: '',
+    token: '',
   };
 
   if (!user || user.password !== password) {
-    console.log('entrou aqui');
     resultado.status = 400;
     resultado.message = 'Invalid fields';
     return resultado;
@@ -43,7 +43,7 @@ const verificaLogin = async (email, password) => {
   const token = createToken(userWithoutPassword);
 
   resultado.status = 200;
-  resultado.message = token;
+  resultado.token = token;
   return resultado;
 };
 
