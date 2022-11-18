@@ -24,10 +24,12 @@ const cadastrar = async (info) => {
   return category;
 };
 
-/* const todosUsers = async () => {
-  const users = await User.findAll();
-  return users;
+const everyCategories = async () => {
+  const categories = await Category.findAll();
+  return categories;
 };
+
+/* 
 
 const findById = async (id) => {
   const user = await User.findOne({
@@ -39,6 +41,7 @@ const findById = async (id) => {
 module.exports = {
   verificaParametros,
   cadastrar,
-/*   todosUsers,
+  everyCategories,
+/* 
   findById, */
 };

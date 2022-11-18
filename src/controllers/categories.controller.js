@@ -10,15 +10,12 @@ const cadastrarCategory = async (req, res) => {
   return res.status(201).json(cadastroRealizado);
 };
 
-/* const exibeUsers = async (_req, res) => {
-  const result = await userService.todosUsers();
-  const mapRest = result.reduce((acc, user) => {
-    const { password: _, ...userWithoutPassword } = user.dataValues;
-    acc.push(userWithoutPassword);
-    return acc;
-  }, []);
-  return res.status(200).json(mapRest);
+const exibeCategories = async (_req, res) => {
+  const result = await categoriesService.everyCategories();
+  return res.status(200).json(result);
 };
+
+/* 
 
 const exibeId = async (req, res) => {
   const result = await userService.findById(req.params.id);
@@ -32,4 +29,5 @@ const exibeId = async (req, res) => {
 
 module.exports = {
   cadastrarCategory,
+  exibeCategories,
 };
