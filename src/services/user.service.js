@@ -34,7 +34,6 @@ const verificaParametros = async (info) => {
     };
   }
 
-  console.log(`Info Email: ${info.email}`);
   const user = await findByEmail(info.email);
   if (user !== null) {
     return {
