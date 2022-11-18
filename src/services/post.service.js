@@ -17,27 +17,19 @@ const schema = Joi.object({
     }),
 });
 
-/* const findCategoryId = async (id) => {
-  const result = await Category.findOne({ where: { id } });
-  return result;
-}; */
-
-const everyCategoriesId = async () => {
-  const result = await Category.findAll({ attributes: ['id'] });
+ const findCategoryId = async (id) => {
+  const result = await Category.findByPk(id);
   return result;
 };
 
 const verificaCategoryId = async (arrayCategory) => {
-  const arrayCategories = await everyCategoriesId();
-  const mapValue = arrayCategory.every((category) => {
-    const result = arrayCategories.some(({ dataValues }) => category === dataValues.id);
-    return result;
-  });
-  console.log(mapValue);
-  return mapValue;
+  const mapValue = await Promise.all(arrayCategory
+    .map((categoryId) => findCategoryId(categoryId)));
+  const everyValue = mapValue.every((category) => Boolean(category));
+  return everyValue;
 };
 
-const verificaParametros = (info) => {
+const verificaParametros = async (info) => {
   const { error, value } = schema.validate(info);
   if (error) {
     return {
@@ -46,7 +38,7 @@ const verificaParametros = (info) => {
     };
   }
 
-  const mapValue = verificaCategoryId(value.categoryIds);
+  const mapValue = await verificaCategoryId(value.categoryIds);
 
   if (!mapValue) {
     return {
@@ -58,15 +50,19 @@ const verificaParametros = (info) => {
   return value;
 };
 
-const cadastrar = async (info) => {
-  const category = await BlogPost.create({ ...info });
-  return category;
+const cadastrar = async (title, content, userId) => {
+  const category = await BlogPost.create({ title, content, userId });
+  console.log(category);
+/*   const category = await BlogPost.create({ ...info });
+  return category; */
 };
 
-/* const todosUsers = async () => {
-  const users = await User.findAll();
+const everyPosts = async () => {
+  const users = await BlogPost.findAll();
   return users;
 };
+
+/* 
 
 const findById = async (id) => {
   const user = await User.findOne({
@@ -78,6 +74,7 @@ const findById = async (id) => {
 module.exports = {
   verificaParametros,
   cadastrar,
+  everyPosts,
 /*   todosUsers,
   findById, */
 };
