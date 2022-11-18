@@ -13,8 +13,12 @@ const cadastrarUser = async (req, res) => {
 
 const exibeUsers = async (_req, res) => {
   const result = await userService.todosUsers();
-  const { password: _, ...userWithoutPassword } = result;
-  return res.status(200).json(userWithoutPassword);
+  const mapRest = result.reduce((acc, user) => {
+    const { password: _, ...userWithoutPassword } = user.dataValues;
+    acc.push(userWithoutPassword);
+    return acc;
+  }, []);
+  return res.status(200).json(mapRest);
 };
 
 module.exports = {

@@ -8,13 +8,12 @@ const verificacaoToken = (req, res, next) => {
     return res.status(401).json({ message: 'Token not found' });
   }
 
-  const { data } = jwt.verify(authorization, process.env.JWT_SECRET);
-
-  if (!data) {
+  try {
+    jwt.verify(authorization, process.env.JWT_SECRET);
+    next();
+  } catch (_) {
     return res.status(401).json({ message: 'Expired or invalid token' });
   }
-
-  next();
 };
 
 module.exports = verificacaoToken;
