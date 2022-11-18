@@ -29,19 +29,8 @@ const everyCategories = async () => {
   return categories;
 };
 
-/* 
-
-const findById = async (id) => {
-  const user = await User.findOne({
-    where: { id },
-  });
-  return user;
-};
- */
 module.exports = {
   verificaParametros,
   cadastrar,
   everyCategories,
-/* 
-  findById, */
 };
