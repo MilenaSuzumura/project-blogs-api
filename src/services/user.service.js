@@ -57,8 +57,16 @@ const todosUsers = async () => {
   return users;
 };
 
+const findById = async (id) => {
+  const user = await User.findOne({
+    where: { id },
+  });
+  return user;
+};
+
 module.exports = {
   verificaParametros,
   cadastrar,
   todosUsers,
+  findById,
 };

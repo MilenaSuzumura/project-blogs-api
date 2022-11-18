@@ -21,7 +21,18 @@ const exibeUsers = async (_req, res) => {
   return res.status(200).json(mapRest);
 };
 
+const exibeId = async (req, res) => {
+  const result = await userService.findById(req.params.id);
+
+  if (!result) {
+    return res.status(404).json({ message: 'User does not exist' });
+  }
+  const { password: _, ...userWithoutPassword } = result.dataValues;
+  return res.status(200).json(userWithoutPassword);
+};
+
 module.exports = {
   cadastrarUser,
   exibeUsers,
+  exibeId,
 };
