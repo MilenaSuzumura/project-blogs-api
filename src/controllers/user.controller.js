@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const { userService } = require('../services/index.service');
 
 const cadastrarUser = async (req, res) => {
@@ -31,8 +32,16 @@ const exibeId = async (req, res) => {
   return res.status(200).json(userWithoutPassword);
 };
 
+const deleteMe = async (req, res) => {
+  const { authorization } = req.headers;
+  const token = jwt.verify(authorization, process.env.JWT_SECRET);
+  await userService.deleteUser(token.data.id);
+  return res.status(204).end();
+};
+
 module.exports = {
   cadastrarUser,
   exibeUsers,
   exibeId,
+  deleteMe,
 };
