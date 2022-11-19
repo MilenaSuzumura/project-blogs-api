@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { BlogPost, Category, PostCategory } = require('../models');
+const { BlogPost, Category, PostCategory, User } = require('../models');
 
 const schema = Joi.object({
   title: Joi.string().required()
@@ -66,8 +66,41 @@ const everyPosts = async () => {
   return users;
 };
 
+const findPostsCategories = async (postId) => {
+  const postArray = await PostCategory.findAll({
+    where: { postId },
+  });
+  return postArray;
+};
+
+const findById = async (id) => {
+  const user = await User.findOne({
+    where: { id },
+    attributes: { exclude: ['password'] },
+  });
+  return user;
+};
+
+const everyInfo = async () => {
+  const posts = await everyPosts();
+
+  const mapRest = await Promise.all(posts.map(async (post) => {
+    const { userId, id } = post.dataValues;
+
+    const { dataValues } = await findById(userId);
+    const categoriesInfo = await findPostsCategories(id);
+    const mapCategories = await Promise.all(categoriesInfo
+      .map((info) => findCategoryId(info.dataValues.categoryId)));
+    const newPost = { ...post.dataValues,
+      user: dataValues,
+      categories: mapCategories };
+    return newPost;
+  }));
+  return mapRest;
+};
+
 module.exports = {
   verificaParametros,
   cadastrarPost,
-  everyPosts,
+  everyInfo,
 };

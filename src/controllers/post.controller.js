@@ -16,12 +16,8 @@ const cadastrarPost = async (req, res) => {
 };
 
 const exibePosts = async (_req, res) => {
-  const result = await postService.everyPosts();
-  const mapRest = result.reduce((acc, post) => {
-    acc.push(post.dataValues);
-    return acc;
-  }, []);
-  return res.status(200).json(mapRest);
+  const result = await postService.everyInfo();
+  return res.status(200).json(result);
 };
 /* 
 const exibeId = async (req, res) => {
