@@ -17,6 +17,11 @@ const schema = Joi.object({
     }),
 });
 
+const verificaAlteracao = Joi.object({
+  title: Joi.string().required(),
+  content: Joi.string().required(),
+});
+
  const findCategoryId = async (id) => {
   const result = await Category.findByPk(id);
   return result;
@@ -123,9 +128,37 @@ const oneInfo = async (id) => {
   return newPost;
 };
 
+const validaUsuario = async (idUser, idPost) => {
+  const teste = await findPostsId(idPost);
+  const { userId } = teste.dataValues;
+  if (idUser !== userId) {
+    return false;
+  }
+  return true;
+};
+
+const alteraInfoPost = async (info, idPost) => {
+  const { error, value } = verificaAlteracao.validate(info);
+
+  if (error) {
+    return false;
+  }
+
+  console.log(idPost, value);
+
+  await BlogPost.update({ ...value }, {
+    where: { id: idPost },
+  });
+
+  const altera = await oneInfo(idPost);
+  return altera;
+};
+
 module.exports = {
   verificaParametros,
   cadastrarPost,
   everyInfo,
   oneInfo,
+  validaUsuario,
+  alteraInfoPost,
 };

@@ -30,8 +30,27 @@ const exibeIdPost = async (req, res) => {
   return res.status(200).json(result);
 }; 
 
+const alterar = async (req, res) => {
+  const { authorization } = req.headers;
+  const token = jwt.verify(authorization, process.env.JWT_SECRET);
+  const validaUsuario = await postService.validaUsuario(token.data.id, req.params.id);
+
+  if (!validaUsuario) {
+    return res.status(401).json({ message: 'Unauthorized user' });
+  }
+
+  const result = await postService.alteraInfoPost(req.body, req.params.id);
+
+  if (!result) {
+    return res.status(400).json({ message: 'Some required fields are missing' });
+  }
+
+  return res.status(200).json(result);
+};
+
 module.exports = {
   cadastrarPost,
   exibePosts,
   exibeIdPost,
+  alterar,
 };
