@@ -99,8 +99,33 @@ const everyInfo = async () => {
   return mapRest;
 };
 
+const findPostsId = async (id) => {
+  const postArray = await BlogPost.findOne({
+    where: { id },
+  });
+  return postArray;
+};
+
+const oneInfo = async (id) => {
+  const post = await findPostsId(id);
+
+  if (!post) {
+    return post;
+  }
+
+  const { dataValues } = await findById(post.userId);
+  const categoriesInfo = await findPostsCategories(id);
+  const mapCategories = await Promise.all(categoriesInfo
+    .map((info) => findCategoryId(info.dataValues.categoryId)));
+  const newPost = { ...post.dataValues,
+    user: dataValues,
+    categories: mapCategories };
+  return newPost;
+};
+
 module.exports = {
   verificaParametros,
   cadastrarPost,
   everyInfo,
+  oneInfo,
 };

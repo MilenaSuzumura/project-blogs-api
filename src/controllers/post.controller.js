@@ -19,20 +19,19 @@ const exibePosts = async (_req, res) => {
   const result = await postService.everyInfo();
   return res.status(200).json(result);
 };
-/* 
-const exibeId = async (req, res) => {
-  const result = await userService.findById(req.params.id);
+ 
+const exibeIdPost = async (req, res) => {
+  const result = await postService.oneInfo(req.params.id);
 
   if (!result) {
-    return res.status(404).json({ message: 'User does not exist' });
+    return res.status(404).json({ message: 'Post does not exist' });
   }
-  const { password: _, ...userWithoutPassword } = result.dataValues;
-  return res.status(200).json(userWithoutPassword);
-}; */
+
+  return res.status(200).json(result);
+}; 
 
 module.exports = {
   cadastrarPost,
   exibePosts,
-/*   exibeUsers,
-  exibeId, */
+  exibeIdPost,
 };

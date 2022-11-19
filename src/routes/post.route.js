@@ -6,5 +6,6 @@ const postRouter = Router();
 
 postRouter.post('/', verificacaoToken, postController.cadastrarPost);
 postRouter.get('/', verificacaoToken, postController.exibePosts);
+postRouter.get('/:id', verificacaoToken, postController.exibeIdPost);
 
 module.exports = postRouter;
