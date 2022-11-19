@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { BlogPost, Category } = require('../models');
+const { BlogPost, Category, PostCategory } = require('../models');
 
 const schema = Joi.object({
   title: Joi.string().required()
@@ -50,11 +50,15 @@ const verificaParametros = async (info) => {
   return value;
 };
 
-const cadastrar = async (title, content, userId) => {
+const cadastraPostCategory = async (postId, categoryId) => {
+  await PostCategory.create({ postId, categoryId });
+};
+
+const cadastrarPost = async (title, content, userId, categoryId) => {
   const category = await BlogPost.create({ title, content, userId });
-  console.log(category);
-/*   const category = await BlogPost.create({ ...info });
-  return category; */
+  await Promise.all(categoryId
+    .map((id) => cadastraPostCategory(category.dataValues.id, id)));
+  return category.dataValues;
 };
 
 const everyPosts = async () => {
@@ -62,19 +66,8 @@ const everyPosts = async () => {
   return users;
 };
 
-/* 
-
-const findById = async (id) => {
-  const user = await User.findOne({
-    where: { id },
-  });
-  return user;
-}; */
-
 module.exports = {
   verificaParametros,
-  cadastrar,
+  cadastrarPost,
   everyPosts,
-/*   todosUsers,
-  findById, */
 };

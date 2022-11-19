@@ -1,4 +1,3 @@
-require('dotenv/config');
 const jwt = require('jsonwebtoken');
 const { postService } = require('../services/index.service');
 
@@ -10,10 +9,10 @@ const cadastrarPost = async (req, res) => {
   }
   
   const { authorization } = req.headers;
-  const token = jwt.verify(authorization, process.env.JWT_SECRET);
-  const { id } = token.data;
-  const cadastroRealizado = await postService.cadastrar(result.title, result.content, id);
-  return res.status(201).json(cadastroRealizado);
+  const token = jwt.verify(authorization, process.env.JWT_SECRET); 
+  const { title, content, categoryIds } = result;
+  const cadastro = await postService.cadastrarPost(title, content, token.data.id, categoryIds);
+  return res.status(201).json(cadastro);
 };
 
 const exibePosts = async (_req, res) => {
