@@ -130,6 +130,13 @@ const oneInfo = async (id) => {
 
 const validaUsuario = async (idUser, idPost) => {
   const teste = await findPostsId(idPost);
+
+  if (!teste) {
+    return {
+      status: 404,
+    };
+  }
+
   const { userId } = teste.dataValues;
   if (idUser !== userId) {
     return false;
@@ -144,14 +151,17 @@ const alteraInfoPost = async (info, idPost) => {
     return false;
   }
 
-  console.log(idPost, value);
-
   await BlogPost.update({ ...value }, {
     where: { id: idPost },
   });
 
   const altera = await oneInfo(idPost);
   return altera;
+};
+
+const Delet = async (idString) => {
+  const id = Number(idString);
+  await BlogPost.destroy({ where: { id } });
 };
 
 module.exports = {
@@ -161,4 +171,5 @@ module.exports = {
   oneInfo,
   validaUsuario,
   alteraInfoPost,
+  Delet,
 };

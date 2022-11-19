@@ -48,9 +48,28 @@ const alterar = async (req, res) => {
   return res.status(200).json(result);
 };
 
+const deletePost = async (req, res) => {
+  const { authorization } = req.headers;
+  const token = jwt.verify(authorization, process.env.JWT_SECRET);
+  const validaUsuario = await postService.validaUsuario(token.data.id, req.params.id);
+
+  if (validaUsuario.status) {
+    return res.status(validaUsuario.status).json({ message: 'Post does not exist' });
+  }
+
+  if (!validaUsuario) {
+    return res.status(401).json({ message: 'Unauthorized user' });
+  }
+
+  const { id } = req.params;
+  await postService.Delet(id);
+    return res.status(204).end();
+};
+
 module.exports = {
   cadastrarPost,
   exibePosts,
   exibeIdPost,
   alterar,
+  deletePost,
 };
