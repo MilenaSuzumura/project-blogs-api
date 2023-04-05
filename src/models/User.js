@@ -1,6 +1,6 @@
 'use strict';
 
-const UserSchema = (sequelize, DataTypes) => {
+module.exports = (sequelize, DataTypes) => {
   const UserModel = sequelize.define('User', {
     id: {
       autoIncrement: true,
@@ -26,5 +26,3 @@ const UserSchema = (sequelize, DataTypes) => {
 
   return UserModel;
 };
-
-module.exports = UserSchema;
