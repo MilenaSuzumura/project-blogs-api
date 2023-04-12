@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = (sequelize, DataTypes) => {
   const category = sequelize.define('Category', {
     id: {
@@ -11,5 +9,6 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false,
     tableName: 'categories',
   });
+
   return category;
 };
