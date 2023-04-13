@@ -1,15 +1,16 @@
 const jwt = require('jsonwebtoken');
-const { userService } = require('../services/index.service');
+const userService = require('../services/user.service');
 
-const cadastrarUser = async (req, res) => {
-  const result = await userService.verificaParametros(req.body);
-
-  if (result.status) {
-    return res.status(result.status).json({ message: result.message });
+const registerUser = async (req, res) => {
+  const verifyAll = await userService.verifyAll(req.body);
+  
+  if (verifyAll) {
+    const { status, message } = verifyAll;
+    return res.status(status).json({ message });
   }
 
-  const cadastroRealizado = await userService.cadastrar(req.body);
-  return res.status(201).json({ token: cadastroRealizado });
+  const { status, token } = await userService.register(req.body);
+  return res.status(status).json({ token });
 };
 
 const exibeUsers = async (_req, res) => {
@@ -40,7 +41,7 @@ const deleteMe = async (req, res) => {
 };
 
 module.exports = {
-  cadastrarUser,
+  registerUser,
   exibeUsers,
   exibeId,
   deleteMe,
