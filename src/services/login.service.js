@@ -1,29 +1,14 @@
 const { findByEmail } = require('../callModel/user.callModel');
 const { createToken } = require('../utils/jwt.utils');
-const { emailAndPassword } = require('../utils/schema');
+const { verifyParametersLogin, verifyEmail } = require('../utils/verify/verify.login');
 
-const verifyParameters = (info) => {
-  const { error, value } = emailAndPassword.validate(info);
+const verifyParameters = (info) => verifyParametersLogin(info);
 
-  if (error) {
-    return {
-      status: 400,
-      message: 'Some required fields are missing',
-    };
-  }
-
-  return value;
-};
-
-const verifyLogin = async (email, password) => {
+const login = async (email, password) => {
   const user = await findByEmail(email);
+  const verify = verifyEmail(user, password);
 
-  if (!user || user.password !== password) {
-    return {
-      status: 400,
-      message: 'Invalid fields',
-    };
-  }
+  if (verify) return verify;
   
   const { password: _, ...userWithoutPassword } = user.dataValues;
   const token = createToken(userWithoutPassword);
@@ -36,5 +21,5 @@ const verifyLogin = async (email, password) => {
 
 module.exports = {
   verifyParameters,
-  verifyLogin,
+  login,
 };
