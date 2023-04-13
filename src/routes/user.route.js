@@ -1,12 +1,12 @@
 const { Router } = require('express');
-const { userController } = require('../controllers/index.controller');
-const verificacaoToken = require('../utils/verificacaoToken');
+const userController = require('../controllers/user.controller');
+const verifyToken = require('../middleware/verifyToken');
 
 const userRouter = Router();
 
 userRouter.post('/', userController.registerUser);
-userRouter.get('/', verificacaoToken, userController.exibeUsers);
-userRouter.get('/:id', verificacaoToken, userController.exibeId);
-userRouter.delete('/me', verificacaoToken, userController.deleteMe);
+userRouter.get('/', verifyToken, userController.getAllUsers);
+userRouter.get('/:id', verifyToken, userController.exibeId);
+userRouter.delete('/me', verifyToken, userController.deleteMe);
 
 module.exports = userRouter;
