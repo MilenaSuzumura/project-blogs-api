@@ -1,20 +1,25 @@
-const { loginService } = require('../services/index.service');
+const loginService = require('../services/login.service');
 
 const login = async (req, res) => {
-  const verificaParametros = loginService.verificaParametros(req.body);
+  const verifyParameters = loginService.verifyParameters(req.body);
 
-  if (!verificaParametros.email) {
-    return res.status(400).json({ message: 'Some required fields are missing' });
+  if (verifyParameters.status) {
+    const { status, message } = verifyParameters;
+
+    return res.status(status).json({ message });
   }
 
-  const { email, password } = verificaParametros;
-  const verificaLogin = await loginService.verificaLogin(email, password);
+  const { email, password } = verifyParameters;
+  const verifyLogin = await loginService.login(email, password);
 
-  if (verificaLogin.message.length !== 0) {
-    return res.status(verificaLogin.status).json({ message: verificaLogin.message });
+  if (verifyLogin.message) {
+    const { status, message } = verifyLogin;
+    return res.status(status).json({ message });
   }
 
-  return res.status(verificaLogin.status).json({ token: verificaLogin.token });
+  const { status, token } = verifyLogin;
+
+  return res.status(status).json({ token });
 };
 
-module.exports = login;
+module.exports = { login };

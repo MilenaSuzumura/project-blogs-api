@@ -1,53 +1,25 @@
-const Joi = require('joi');
-const { User } = require('../models');
+const { findByEmail } = require('../callModel/user.callModel');
 const { createToken } = require('../utils/jwt.utils');
+const { verifyParametersLogin, verifyEmail } = require('../utils/verify/verify.login');
 
-const verificaParametros = (info) => {
-  const schema = Joi.object({
-    email: Joi.string().email().required(),
-    password: Joi.string().required(),
-  });
+const verifyParameters = (info) => verifyParametersLogin(info);
 
-  const { error, value } = schema.validate(info);
-
-  if (error) {
-    return error;
-  }
-
-  return value;
-};
-
-const findByEmail = async (email) => {
-  const user = await User.findOne({
-    where: { email },
-  });
-  return user;
-};
-
-const verificaLogin = async (email, password) => {
+const login = async (email, password) => {
   const user = await findByEmail(email);
-  // console.log(user);
-  const resultado = {
-    status: 0,
-    message: '',
-    token: '',
-  };
+  const verify = verifyEmail(user, password);
 
-  if (!user || user.password !== password) {
-    resultado.status = 400;
-    resultado.message = 'Invalid fields';
-    return resultado;
-  }
+  if (verify) return verify;
   
   const { password: _, ...userWithoutPassword } = user.dataValues;
   const token = createToken(userWithoutPassword);
 
-  resultado.status = 200;
-  resultado.token = token;
-  return resultado;
+  return {
+    status: 200,
+    token,
+  };
 };
 
 module.exports = {
-  verificaParametros,
-  verificaLogin,
+  verifyParameters,
+  login,
 };
