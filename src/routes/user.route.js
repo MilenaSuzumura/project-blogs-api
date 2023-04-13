@@ -4,7 +4,7 @@ const verificacaoToken = require('../utils/verificacaoToken');
 
 const userRouter = Router();
 
-userRouter.post('/', userController.cadastrarUser);
+userRouter.post('/', userController.registerUser);
 userRouter.get('/', verificacaoToken, userController.exibeUsers);
 userRouter.get('/:id', verificacaoToken, userController.exibeId);
 userRouter.delete('/me', verificacaoToken, userController.deleteMe);
