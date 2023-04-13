@@ -3,7 +3,7 @@ const userService = require('../services/user.service');
 
 const registerUser = async (req, res) => {
   const verifyAll = await userService.verifyAll(req.body);
-  
+
   if (verifyAll) {
     const { status, message } = verifyAll;
     return res.status(status).json({ message });
@@ -13,14 +13,9 @@ const registerUser = async (req, res) => {
   return res.status(status).json({ token });
 };
 
-const exibeUsers = async (_req, res) => {
-  const result = await userService.todosUsers();
-  const mapRest = result.reduce((acc, user) => {
-    const { password: _, ...userWithoutPassword } = user.dataValues;
-    acc.push(userWithoutPassword);
-    return acc;
-  }, []);
-  return res.status(200).json(mapRest);
+const getAllUsers = async (_req, res) => {
+  const users = await userService.getAll();
+  return res.status(200).json(users);
 };
 
 const exibeId = async (req, res) => {
@@ -42,7 +37,7 @@ const deleteMe = async (req, res) => {
 
 module.exports = {
   registerUser,
-  exibeUsers,
+  getAllUsers,
   exibeId,
   deleteMe,
 };
