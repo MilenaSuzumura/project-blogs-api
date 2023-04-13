@@ -10,7 +10,7 @@ const login = async (req, res) => {
   }
 
   const { email, password } = verifyParameters;
-  const verifyLogin = await loginService.verifyLogin(email, password);
+  const verifyLogin = await loginService.login(email, password);
 
   if (verifyLogin.message) {
     const { status, message } = verifyLogin;
