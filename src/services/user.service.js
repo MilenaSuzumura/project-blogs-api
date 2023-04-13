@@ -1,5 +1,5 @@
 const { User } = require('../models');
-const { registerUser, findByEmail } = require('../callModel/user.callModel');
+const { registerUser, findByEmail, getAllUsers } = require('../callModel/user.callModel');
 const { createToken } = require('../utils/jwt.utils');
 const { verifyEmail, verifyParameters } = require('../utils/verify/verify.user');
 
@@ -27,10 +27,7 @@ const register = async (info) => {
   };
 };
 
-const todosUsers = async () => {
-  const users = await User.findAll();
-  return users;
-};
+const getAll = async () => getAllUsers();
 
 const findById = async (id) => {
   const user = await User.findOne({
@@ -44,9 +41,11 @@ const deleteUser = async (id) => {
 };
 
 module.exports = {
+  verifyEmail,
+  verifyParameters,
   verifyAll,
   register,
-  todosUsers,
+  getAll,
   findById,
   deleteUser,
 };
