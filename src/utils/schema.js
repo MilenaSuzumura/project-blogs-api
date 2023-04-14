@@ -21,7 +21,15 @@ const createUserValidation = Joi.object({
   image: Joi.string(),
 });
 
+const nameCategoryValidation = Joi.object({
+  name: Joi.string().required()
+    .messages({
+      'string.base': '"name" is required',
+    }),
+});
+
 module.exports = {
   emailAndPasswordValidation,
   createUserValidation,
+  nameCategoryValidation,
 };
