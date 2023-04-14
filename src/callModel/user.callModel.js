@@ -34,9 +34,14 @@ const registerUser = async (info) => {
   await User.create({ ...info });
 };
 
+const deleteUser = async (id) => {
+  await User.destroy({ where: { id } });
+};
+
 module.exports = {
   getAllUsers,
   findById,
   findByEmail,
   registerUser,
+  deleteUser,
 };
