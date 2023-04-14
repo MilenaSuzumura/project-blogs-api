@@ -18,14 +18,10 @@ const getAllUsers = async (_req, res) => {
   return res.status(200).json(users);
 };
 
-const exibeId = async (req, res) => {
-  const result = await userService.findById(req.params.id);
-
-  if (!result) {
-    return res.status(404).json({ message: 'User does not exist' });
-  }
-  const { password: _, ...userWithoutPassword } = result.dataValues;
-  return res.status(200).json(userWithoutPassword);
+const getOneUser = async (req, res) => {
+  const result = await userService.getOneUser(req.params.id);
+  const { status, message } = result;
+  return res.status(status).json(message);
 };
 
 const deleteMe = async (req, res) => {
@@ -38,6 +34,6 @@ const deleteMe = async (req, res) => {
 module.exports = {
   registerUser,
   getAllUsers,
-  exibeId,
+  getOneUser,
   deleteMe,
 };
