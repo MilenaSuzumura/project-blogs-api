@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken');
 const userService = require('../services/user.service');
+const { getToken } = require('../utils/jwt.utils');
 
 const registerUser = async (req, res) => {
   const verifyAll = await userService.verifyAll(req.body);
@@ -19,15 +19,15 @@ const getAllUsers = async (_req, res) => {
 };
 
 const getOneUser = async (req, res) => {
-  const result = await userService.getOneUser(req.params.id);
+  const result = await userService.getOneUsers(req.params.id);
   const { status, message } = result;
   return res.status(status).json(message);
 };
 
 const deleteMe = async (req, res) => {
   const { authorization } = req.headers;
-  const token = jwt.verify(authorization, process.env.JWT_SECRET);
-  await userService.deleteUser(token.data.id);
+  const token = getToken(authorization);
+  await userService.deleteMe(token.data.id);
   return res.status(204).end();
 };
 
