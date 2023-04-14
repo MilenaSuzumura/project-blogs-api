@@ -1,13 +1,15 @@
-const { categoriesService } = require('../services/index.service');
+const categoriesService = require('../services/categories.service');
 
-const cadastrarCategory = async (req, res) => {
-  const result = await categoriesService.verificaParametros(req.body);
+const registerCategory = async (req, res) => {
+  const validate = await categoriesService.verifyParameters(req.body);
 
-  if (result.status) {
-    return res.status(result.status).json({ message: result.message });
+  if (validate.status) {
+    const { status, message } = validate;
+    return res.status(status).json({ message });
   }
-  const cadastroRealizado = await categoriesService.cadastrar(result);
-  return res.status(201).json(cadastroRealizado);
+
+  const registerDone = await categoriesService.register(validate);
+  return res.status(201).json(registerDone);
 };
 
 const exibeCategories = async (_req, res) => {
@@ -28,6 +30,6 @@ const exibeId = async (req, res) => {
 }; */
 
 module.exports = {
-  cadastrarCategory,
+  registerCategory,
   exibeCategories,
 };
