@@ -1,4 +1,3 @@
-const { User } = require('../models');
 const { createToken } = require('../utils/jwt.utils');
 const { verifyEmail, verifyParameters } = require('../utils/verify/verify.user');
 const {
@@ -6,6 +5,7 @@ const {
   findById,
   findByEmail,
   registerUser,
+  deleteUser,
 } = require('../callModel/user.callModel');
 
 const verifyAll = async (info) => {
@@ -45,9 +45,7 @@ const getOneUser = async (id) => {
   };
 };
 
-const deleteUser = async (id) => {
-  await User.destroy({ where: { id } });
-};
+const deleteMe = async (id) => deleteUser(id);
 
 module.exports = {
   verifyEmail,
@@ -56,5 +54,5 @@ module.exports = {
   register,
   getAll,
   getOneUser,
-  deleteUser,
+  deleteMe,
 };
