@@ -12,24 +12,12 @@ const registerCategory = async (req, res) => {
   return res.status(201).json(registerDone);
 };
 
-const exibeCategories = async (_req, res) => {
-  const result = await categoriesService.everyCategories();
+const getAllCategories = async (_req, res) => {
+  const result = await categoriesService.getCategories();
   return res.status(200).json(result);
 };
 
-/* 
-
-const exibeId = async (req, res) => {
-  const result = await userService.findById(req.params.id);
-
-  if (!result) {
-    return res.status(404).json({ message: 'User does not exist' });
-  }
-  const { password: _, ...userWithoutPassword } = result.dataValues;
-  return res.status(200).json(userWithoutPassword);
-}; */
-
 module.exports = {
   registerCategory,
-  exibeCategories,
+  getAllCategories,
 };
