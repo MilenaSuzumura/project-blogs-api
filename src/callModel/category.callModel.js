@@ -5,4 +5,9 @@ const registerCategory = async (info) => {
   return category;
 };
 
-module.exports = { registerCategory };
+const getAllCategory = async () => {
+  const categories = await Category.findAll();
+  return categories;
+};
+
+module.exports = { registerCategory, getAllCategory };
