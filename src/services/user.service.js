@@ -1,7 +1,12 @@
 const { User } = require('../models');
-const { registerUser, findByEmail, getAllUsers } = require('../callModel/user.callModel');
 const { createToken } = require('../utils/jwt.utils');
 const { verifyEmail, verifyParameters } = require('../utils/verify/verify.user');
+const {
+  getAllUsers,
+  findById,
+  findByEmail,
+  registerUser,
+} = require('../callModel/user.callModel');
 
 const verifyAll = async (info) => {
   const verify = verifyParameters(info);
@@ -29,11 +34,15 @@ const register = async (info) => {
 
 const getAll = async () => getAllUsers();
 
-const findById = async (id) => {
-  const user = await User.findOne({
-    where: { id },
-  });
-  return user;
+const getOneUser = async (id) => {
+  const user = await findById(id);
+
+  if (user) return { status: 200, message: user };
+
+  return {
+    status: 404,
+    message: { message: 'User does not exist' },
+  };
 };
 
 const deleteUser = async (id) => {
@@ -46,6 +55,6 @@ module.exports = {
   verifyAll,
   register,
   getAll,
-  findById,
+  getOneUser,
   deleteUser,
 };
