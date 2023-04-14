@@ -17,8 +17,8 @@ const registerPost = async (req, res) => {
   return res.status(201).json(register);
 };
 
-const exibePosts = async (_req, res) => {
-  const result = await postService.everyInfo();
+const getPosts = async (_req, res) => {
+  const result = await postService.getPosts();
   return res.status(200).json(result);
 };
  
@@ -70,7 +70,7 @@ const deletePost = async (req, res) => {
 
 module.exports = {
   registerPost,
-  exibePosts,
+  getPosts,
   exibeIdPost,
   alterar,
   deletePost,

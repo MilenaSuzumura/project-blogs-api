@@ -4,4 +4,11 @@ const registerPostCategory = async (postId, categoryId) => {
   await PostCategory.create({ postId, categoryId });
 };
 
-module.exports = { registerPostCategory };
+const findByIdPostsCategories = async (postId) => {
+  const postArray = await PostCategory.findAll({
+    where: { postId },
+  });
+  return postArray;
+};
+
+module.exports = { registerPostCategory, findByIdPostsCategories };

@@ -8,4 +8,9 @@ const registerBlogPost = async (title, content, userId, categoryId) => {
   return category.dataValues;
 };
 
-module.exports = { registerBlogPost };
+const getAllPosts = async () => {
+  const posts = await BlogPost.findAll({ raw: true });
+  return posts;
+};
+
+module.exports = { registerBlogPost, getAllPosts };

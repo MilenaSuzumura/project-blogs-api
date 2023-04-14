@@ -1,8 +1,10 @@
 const Joi = require('joi');
-const { BlogPost, PostCategory, User } = require('../models');
+const { BlogPost } = require('../models');
 const { verifyParametersPost, verifyArrayCategory } = require('../utils/verify/verify.post');
 const { findCategoryId } = require('../callModel/category.callModel');
-const { registerBlogPost } = require('../callModel/blogPost.callModel');
+const { registerBlogPost, getAllPosts } = require('../callModel/blogPost.callModel');
+const { findByIdPostsCategories } = require('../callModel/postCategory.callModel');
+const { findById } = require('../callModel/user.callModel');
 
 const verificaAlteracao = Joi.object({
   title: Joi.string().required(),
@@ -26,42 +28,29 @@ const registerPost = async (infoPost, userId) => {
   return register;
 };
 
-const everyPosts = async () => {
-  const users = await BlogPost.findAll();
-  return users;
-};
-
-const findPostsCategories = async (postId) => {
-  const postArray = await PostCategory.findAll({
-    where: { postId },
-  });
-  return postArray;
-};
-
-const findById = async (id) => {
-  const user = await User.findOne({
-    where: { id },
-    attributes: { exclude: ['password'] },
-  });
-  return user;
-};
-
-const everyInfo = async () => {
-  const posts = await everyPosts();
-
+const listPost = async (posts) => {
   const mapRest = await Promise.all(posts.map(async (post) => {
-    const { userId, id } = post.dataValues;
+    const { userId, id } = post;
 
-    const { dataValues } = await findById(userId);
-    const categoriesInfo = await findPostsCategories(id);
-    const mapCategories = await Promise.all(categoriesInfo
-      .map((info) => findCategoryId(info.dataValues.categoryId)));
-    const newPost = { ...post.dataValues,
-      user: dataValues,
-      categories: mapCategories };
+    const user = await findById(userId);
+    const postCategories = await findByIdPostsCategories(id);
+    const categories = await Promise.all(postCategories
+      .map((postCategory) => findCategoryId(postCategory.categoryId)));
+    const newPost = {
+      ...post,
+      user,
+      categories,
+    };
     return newPost;
   }));
+
   return mapRest;
+};
+
+const getPosts = async () => {
+  const posts = await getAllPosts();
+  const allPosts = await listPost(posts);
+  return allPosts;
 };
 
 const findPostsId = async (id) => {
@@ -79,7 +68,7 @@ const oneInfo = async (id) => {
   }
 
   const { dataValues } = await findById(post.userId);
-  const categoriesInfo = await findPostsCategories(id);
+  const categoriesInfo = await findByIdPostsCategories(id);
   const mapCategories = await Promise.all(categoriesInfo
     .map((info) => findCategoryId(info.dataValues.categoryId)));
   const newPost = { ...post.dataValues,
@@ -127,7 +116,7 @@ const Delet = async (idString) => {
 module.exports = {
   verifyParameters,
   registerPost,
-  everyInfo,
+  getPosts,
   oneInfo,
   validaUsuario,
   alteraInfoPost,
