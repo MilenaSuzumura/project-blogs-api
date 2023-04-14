@@ -1,18 +1,20 @@
 const jwt = require('jsonwebtoken');
-const { postService } = require('../services/index.service');
+const postService = require('../services/post.service');
+const { getToken } = require('../utils/jwt.utils');
 
-const cadastrarPost = async (req, res) => {
-  const result = await postService.verificaParametros(req.body);
-  
-  if (result.status) {    
-    return res.status(result.status).json({ message: result.message });
+const registerPost = async (req, res) => {
+  const verify = await postService.verifyParameters(req.body);
+
+  if (verify.status) {
+    const { status, message } = verify;
+    return res.status(status).json({ message });
   }
   
   const { authorization } = req.headers;
-  const token = jwt.verify(authorization, process.env.JWT_SECRET); 
-  const { title, content, categoryIds } = result;
-  const cadastro = await postService.cadastrarPost(title, content, token.data.id, categoryIds);
-  return res.status(201).json(cadastro);
+  const token = getToken(authorization); 
+
+  const register = await postService.registerPost(verify, token.data.id);
+  return res.status(201).json(register);
 };
 
 const exibePosts = async (_req, res) => {
@@ -67,7 +69,7 @@ const deletePost = async (req, res) => {
 };
 
 module.exports = {
-  cadastrarPost,
+  registerPost,
   exibePosts,
   exibeIdPost,
   alterar,

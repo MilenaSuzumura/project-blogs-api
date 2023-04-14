@@ -28,8 +28,25 @@ const nameCategoryValidation = Joi.object({
     }),
 });
 
+const registerPostValidation = Joi.object({
+  title: Joi.string().required()
+    .messages({
+      'string.empty': 'Some required fields are missing',
+    }),
+  content: Joi.string().required()
+    .messages({
+      'string.empty': 'Some required fields are missing',
+    }),
+    categoryIds: Joi.array().min(1).required()
+    .messages({
+      'any.required': 'Some required fields are missing',
+      'string.min': 'one or more "categoryIds" not found',
+    }),
+});
+
 module.exports = {
   emailAndPasswordValidation,
   createUserValidation,
   nameCategoryValidation,
+  registerPostValidation,
 };

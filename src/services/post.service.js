@@ -1,69 +1,29 @@
 const Joi = require('joi');
-const { BlogPost, Category, PostCategory, User } = require('../models');
-
-const schema = Joi.object({
-  title: Joi.string().required()
-    .messages({
-      'string.empty': 'Some required fields are missing',
-    }),
-  content: Joi.string().required()
-    .messages({
-      'string.empty': 'Some required fields are missing',
-    }),
-    categoryIds: Joi.array().min(1).required()
-    .messages({
-      'any.required': 'Some required fields are missing',
-      'string.min': 'one or more "categoryIds" not found',
-    }),
-});
+const { BlogPost, PostCategory, User } = require('../models');
+const { verifyParametersPost, verifyArrayCategory } = require('../utils/verify/verify.post');
+const { findCategoryId } = require('../callModel/category.callModel');
+const { registerBlogPost } = require('../callModel/blogPost.callModel');
 
 const verificaAlteracao = Joi.object({
   title: Joi.string().required(),
   content: Joi.string().required(),
 });
 
- const findCategoryId = async (id) => {
-  const result = await Category.findByPk(id);
-  return result;
-};
+const verifyParameters = async (info) => {
+  const verify = verifyParametersPost(info);
 
-const verificaCategoryId = async (arrayCategory) => {
-  const mapValue = await Promise.all(arrayCategory
-    .map((categoryId) => findCategoryId(categoryId)));
-  const everyValue = mapValue.every((category) => Boolean(category));
-  return everyValue;
-};
-
-const verificaParametros = async (info) => {
-  const { error, value } = schema.validate(info);
-  if (error) {
-    return {
-      status: 400,
-      message: error.message,
-    };
+  if (verify.message) {
+    return verify;
   }
 
-  const mapValue = await verificaCategoryId(value.categoryIds);
-
-  if (!mapValue) {
-    return {
-      status: 400,
-      message: 'one or more "categoryIds" not found',
-    };
-  }
-
-  return value;
+  const validateCategory = await verifyArrayCategory(verify);
+  return validateCategory;
 };
 
-const cadastraPostCategory = async (postId, categoryId) => {
-  await PostCategory.create({ postId, categoryId });
-};
-
-const cadastrarPost = async (title, content, userId, categoryId) => {
-  const category = await BlogPost.create({ title, content, userId });
-  await Promise.all(categoryId
-    .map((id) => cadastraPostCategory(category.dataValues.id, id)));
-  return category.dataValues;
+const registerPost = async (infoPost, userId) => {
+  const { title, content, categoryIds } = infoPost;
+  const register = registerBlogPost(title, content, userId, categoryIds);
+  return register;
 };
 
 const everyPosts = async () => {
@@ -165,8 +125,8 @@ const Delet = async (idString) => {
 };
 
 module.exports = {
-  verificaParametros,
-  cadastrarPost,
+  verifyParameters,
+  registerPost,
   everyInfo,
   oneInfo,
   validaUsuario,

@@ -10,4 +10,9 @@ const getAllCategory = async () => {
   return categories;
 };
 
-module.exports = { registerCategory, getAllCategory };
+const findCategoryId = async (id) => {
+  const result = await Category.findByPk(id);
+  return result;
+};
+
+module.exports = { registerCategory, getAllCategory, findCategoryId };
