@@ -1,4 +1,4 @@
-const { registerPostValidation } = require('../schema');
+const { registerPostValidation, modifyPostValidate } = require('../schema');
 const { findCategoryId } = require('../../callModel/category.callModel');
 
 const verifyParametersPost = (info) => {
@@ -30,4 +30,17 @@ const verifyArrayCategory = async (verify) => {
   return verify;
 };
 
-module.exports = { verifyParametersPost, verifyArrayCategory };
+const verifyModifyPost = (verify) => {
+  const { error } = modifyPostValidate.validate(verify);
+
+  if (error) {
+    return {
+      status: 400,
+      message: 'Some required fields are missing',
+    };
+  }
+  
+  return verify;
+};
+
+module.exports = { verifyParametersPost, verifyArrayCategory, verifyModifyPost };
