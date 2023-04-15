@@ -1,15 +1,18 @@
-const Joi = require('joi');
 const { BlogPost } = require('../models');
-const { verifyParametersPost, verifyArrayCategory } = require('../utils/verify/verify.post');
+const {
+  verifyParametersPost,
+  verifyArrayCategory,
+  verifyModifyPost,
+} = require('../utils/verify/verify.post');
 const { findCategoryId } = require('../callModel/category.callModel');
-const { registerBlogPost, getAllPosts } = require('../callModel/blogPost.callModel');
 const { findByIdPostsCategories } = require('../callModel/postCategory.callModel');
 const { findById } = require('../callModel/user.callModel');
-
-const verificaAlteracao = Joi.object({
-  title: Joi.string().required(),
-  content: Joi.string().required(),
-});
+const {
+  registerBlogPost,
+  getAllPosts,
+  findPostsId,
+  modify,
+} = require('../callModel/blogPost.callModel');
 
 const verifyParameters = async (info) => {
   const verify = verifyParametersPost(info);
@@ -53,59 +56,28 @@ const getPosts = async () => {
   return allPosts;
 };
 
-const findPostsId = async (id) => {
-  const postArray = await BlogPost.findOne({
-    where: { id },
-  });
-  return postArray;
-};
-
-const oneInfo = async (id) => {
+const findOnePost = async (idString) => {
+  const id = parseInt(idString, 10);
   const post = await findPostsId(id);
 
   if (!post) {
-    return post;
+    return { status: 404, message: 'Post does not exist' };
   }
 
-  const { dataValues } = await findById(post.userId);
-  const categoriesInfo = await findByIdPostsCategories(id);
-  const mapCategories = await Promise.all(categoriesInfo
-    .map((info) => findCategoryId(info.dataValues.categoryId)));
-  const newPost = { ...post.dataValues,
-    user: dataValues,
-    categories: mapCategories };
-  return newPost;
+  const findPost = await listPost([{ userId: post.userId, id }]);
+  return findPost[0];
 };
 
-const validaUsuario = async (idUser, idPost) => {
-  const teste = await findPostsId(idPost);
+const modifyPost = async (info, idPost) => {
+  const verify = verifyModifyPost(info);
 
-  if (!teste) {
-    return {
-      status: 404,
-    };
-  }
+  if (verify.status) return verify;
 
-  const { userId } = teste.dataValues;
-  if (idUser !== userId) {
-    return false;
-  }
-  return true;
-};
+  await modify(idPost, verify);
 
-const alteraInfoPost = async (info, idPost) => {
-  const { error, value } = verificaAlteracao.validate(info);
-
-  if (error) {
-    return false;
-  }
-
-  await BlogPost.update({ ...value }, {
-    where: { id: idPost },
-  });
-
-  const altera = await oneInfo(idPost);
-  return altera;
+  const otherInfoPost = await findOnePost(idPost);
+  const post = await findPostsId(idPost);
+  return { ...post, ...otherInfoPost };
 };
 
 const Delet = async (idString) => {
@@ -117,8 +89,7 @@ module.exports = {
   verifyParameters,
   registerPost,
   getPosts,
-  oneInfo,
-  validaUsuario,
-  alteraInfoPost,
+  findOnePost,
+  modifyPost,
   Delet,
 };
