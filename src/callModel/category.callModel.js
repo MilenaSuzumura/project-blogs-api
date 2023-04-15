@@ -12,7 +12,7 @@ const getAllCategory = async () => {
 
 const findCategoryId = async (id) => {
   const result = await Category.findByPk(id);
-  return result;
+  return result.dataValues;
 };
 
 module.exports = { registerCategory, getAllCategory, findCategoryId };
