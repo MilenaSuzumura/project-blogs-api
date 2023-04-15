@@ -44,9 +44,15 @@ const registerPostValidation = Joi.object({
     }),
 });
 
+const modifyPostValidate = Joi.object({
+  title: Joi.string().required(),
+  content: Joi.string().required(),
+});
+
 module.exports = {
   emailAndPasswordValidation,
   createUserValidation,
   nameCategoryValidation,
   registerPostValidation,
+  modifyPostValidate,
 };
