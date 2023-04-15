@@ -13,4 +13,19 @@ const getAllPosts = async () => {
   return posts;
 };
 
-module.exports = { registerBlogPost, getAllPosts };
+const findPostsId = async (id) => {
+  const postArray = await BlogPost.findOne({
+    raw: true,
+    where: { id },
+  });
+
+  return postArray;
+};
+
+const modify = async (id, infoPost) => {
+  await BlogPost.update({ ...infoPost }, {
+    where: { id },
+  });
+};
+
+module.exports = { registerBlogPost, getAllPosts, findPostsId, modify };
