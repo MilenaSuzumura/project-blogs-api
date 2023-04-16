@@ -8,9 +8,9 @@ const verifySameUser = async (req, res, next) => {
 
   const infoPost = await findPostsId(idPost);
 
-  if (!infoPost || infoPost.userId !== id) {
-    return res.status(401).json({ message: 'Unauthorized user' });
-  }
+  if (!infoPost) return res.status(404).json({ message: 'Post does not exist' });
+ 
+  if (infoPost.userId !== id) return res.status(401).json({ message: 'Unauthorized user' });
 
   next();
 };
