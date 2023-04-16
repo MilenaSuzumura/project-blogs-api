@@ -1,4 +1,3 @@
-const jwt = require('jsonwebtoken');
 const postService = require('../services/post.service');
 const { getToken } = require('../utils/jwt.utils');
 
@@ -45,21 +44,10 @@ const modifyPost = async (req, res) => {
 };
 
 const deletePost = async (req, res) => {
-  const { authorization } = req.headers;
-  const token = jwt.verify(authorization, process.env.JWT_SECRET);
-  const validaUsuario = await postService.validaUsuario(token.data.id, req.params.id);
-
-  if (validaUsuario.status) {
-    return res.status(validaUsuario.status).json({ message: 'Post does not exist' });
-  }
-
-  if (!validaUsuario) {
-    return res.status(401).json({ message: 'Unauthorized user' });
-  }
-
   const { id } = req.params;
-  await postService.Delet(id);
-    return res.status(204).end();
+  await postService.deletePost(id);
+
+  return res.status(204).end();
 };
 
 module.exports = {
