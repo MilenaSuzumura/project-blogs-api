@@ -1,4 +1,3 @@
-const { BlogPost } = require('../models');
 const {
   verifyParametersPost,
   verifyArrayCategory,
@@ -12,6 +11,7 @@ const {
   getAllPosts,
   findPostsId,
   modify,
+  deleteBlogPost,
 } = require('../callModel/blogPost.callModel');
 
 const verifyParameters = async (info) => {
@@ -80,9 +80,9 @@ const modifyPost = async (info, idPost) => {
   return { ...post, ...otherInfoPost };
 };
 
-const Delet = async (idString) => {
+const deletePost = async (idString) => {
   const id = Number(idString);
-  await BlogPost.destroy({ where: { id } });
+  await deleteBlogPost(id);
 };
 
 module.exports = {
@@ -91,5 +91,5 @@ module.exports = {
   getPosts,
   findOnePost,
   modifyPost,
-  Delet,
+  deletePost,
 };
