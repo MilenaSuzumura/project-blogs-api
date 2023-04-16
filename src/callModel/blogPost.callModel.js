@@ -28,4 +28,8 @@ const modify = async (id, infoPost) => {
   });
 };
 
-module.exports = { registerBlogPost, getAllPosts, findPostsId, modify };
+const deleteBlogPost = async (id) => {
+  await BlogPost.destroy({ where: { id } });
+};
+
+module.exports = { registerBlogPost, getAllPosts, findPostsId, modify, deleteBlogPost };
