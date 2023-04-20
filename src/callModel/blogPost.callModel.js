@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { BlogPost } = require('../models');
 const { registerPostCategory } = require('./postCategory.callModel');
 
@@ -32,4 +33,17 @@ const deleteBlogPost = async (id) => {
   await BlogPost.destroy({ where: { id } });
 };
 
-module.exports = { registerBlogPost, getAllPosts, findPostsId, modify, deleteBlogPost };
+const search = async (query) => {
+  const postArray = await BlogPost.findAll({
+    raw: true,
+    where: {
+      [Op.or]: [
+      { title: { [Op.like]: `%${query}%` } },
+      { content: { [Op.like]: `%${query}%` } },
+    ] },
+  });
+
+  return postArray;
+};
+
+module.exports = { registerBlogPost, getAllPosts, findPostsId, modify, deleteBlogPost, search };

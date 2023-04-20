@@ -12,6 +12,7 @@ const {
   findPostsId,
   modify,
   deleteBlogPost,
+  search,
 } = require('../callModel/blogPost.callModel');
 
 const verifyParameters = async (info) => {
@@ -64,7 +65,7 @@ const findOnePost = async (idString) => {
     return { status: 404, message: 'Post does not exist' };
   }
 
-  const findPost = await listPost([{ userId: post.userId, id }]);
+  const findPost = await listPost([post]);
   return findPost[0];
 };
 
@@ -85,6 +86,12 @@ const deletePost = async (idString) => {
   await deleteBlogPost(id);
 };
 
+const searchPost = async (query) => {
+  const infoPost = await search(query);
+  const allInfo = await listPost(infoPost);
+  return allInfo;
+};
+
 module.exports = {
   verifyParameters,
   registerPost,
@@ -92,4 +99,5 @@ module.exports = {
   findOnePost,
   modifyPost,
   deletePost,
+  searchPost,
 };
