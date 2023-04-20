@@ -1,7 +1,7 @@
 require('dotenv/config');
 const jwt = require('jsonwebtoken');
 
-const verificacaoToken = (req, res, next) => {
+const verifyToken = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization) {
@@ -16,4 +16,4 @@ const verificacaoToken = (req, res, next) => {
   }
 };
 
-module.exports = verificacaoToken;
+module.exports = verifyToken;

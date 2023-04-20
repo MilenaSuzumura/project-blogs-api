@@ -1,13 +1,15 @@
 const { Router } = require('express');
-const { postController } = require('../controllers/index.controller');
-const verificacaoToken = require('../utils/verificacaoToken');
+const postController = require('../controllers/post.controller');
+const verifyToken = require('../middleware/verifyToken');
+const verifySameUser = require('../middleware/verifySameUser');
 
 const postRouter = Router();
 
-postRouter.post('/', verificacaoToken, postController.cadastrarPost);
-postRouter.get('/', verificacaoToken, postController.exibePosts);
-postRouter.get('/:id', verificacaoToken, postController.exibeIdPost);
-postRouter.put('/:id', verificacaoToken, postController.alterar);
-postRouter.delete('/:id', verificacaoToken, postController.deletePost);
+postRouter.post('/', verifyToken, postController.registerPost);
+postRouter.get('/', verifyToken, postController.getPosts);
+postRouter.get('/:id', verifyToken, postController.findByIdPost);
+postRouter.put('/:id', verifyToken, verifySameUser, postController.modifyPost);
+postRouter.delete('/:id', verifyToken, verifySameUser, postController.deletePost);
+postRouter.get('/search', verifyToken, postController.searchPost);
 
 module.exports = postRouter;

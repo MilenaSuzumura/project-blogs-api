@@ -1,36 +1,14 @@
-const Joi = require('joi');
-const { Category } = require('../models');
+const { verifyParametersCategories } = require('../utils/verify/verify.categories');
+const { registerCategory, getAllCategory } = require('../callModel/category.callModel');
 
-const schema = Joi.object({
-  name: Joi.string().required()
-    .messages({
-      'string.base': '"name" is required',
-    }),
-});
+const verifyParameters = (info) => verifyParametersCategories(info);
 
-const verificaParametros = async (info) => {
-  const { error, value } = schema.validate(info);
-  if (error) {
-    return {
-      status: 400,
-      message: error.message,
-    };
-  }
-  return value;
-};
+const register = async (info) => registerCategory(info);
 
-const cadastrar = async (info) => {
-  const category = await Category.create({ ...info });
-  return category;
-};
-
-const everyCategories = async () => {
-  const categories = await Category.findAll();
-  return categories;
-};
+const getCategories = async () => getAllCategory();
 
 module.exports = {
-  verificaParametros,
-  cadastrar,
-  everyCategories,
+  verifyParameters,
+  register,
+  getCategories,
 };
