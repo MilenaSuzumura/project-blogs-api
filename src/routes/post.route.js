@@ -10,5 +10,6 @@ postRouter.get('/', verifyToken, postController.getPosts);
 postRouter.get('/:id', verifyToken, postController.findByIdPost);
 postRouter.put('/:id', verifyToken, verifySameUser, postController.modifyPost);
 postRouter.delete('/:id', verifyToken, verifySameUser, postController.deletePost);
+postRouter.get('/search', verifyToken, postController.searchPost);
 
 module.exports = postRouter;
