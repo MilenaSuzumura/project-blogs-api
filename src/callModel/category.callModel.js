@@ -10,4 +10,12 @@ const getAllCategory = async () => {
   return categories;
 };
 
-module.exports = { registerCategory, getAllCategory };
+const findCategoryId = async (id) => {
+  const result = await Category.findOne({
+    raw: true,
+    where: { id },
+  });
+  return result;
+};
+
+module.exports = { registerCategory, getAllCategory, findCategoryId };

@@ -1,75 +1,66 @@
-const jwt = require('jsonwebtoken');
-const { postService } = require('../services/index.service');
+const postService = require('../services/post.service');
+const { getToken } = require('../utils/jwt.utils');
 
-const cadastrarPost = async (req, res) => {
-  const result = await postService.verificaParametros(req.body);
-  
-  if (result.status) {    
-    return res.status(result.status).json({ message: result.message });
+const registerPost = async (req, res) => {
+  const verify = await postService.verifyParameters(req.body);
+
+  if (verify.status) {
+    const { status, message } = verify;
+    return res.status(status).json({ message });
   }
   
   const { authorization } = req.headers;
-  const token = jwt.verify(authorization, process.env.JWT_SECRET); 
-  const { title, content, categoryIds } = result;
-  const cadastro = await postService.cadastrarPost(title, content, token.data.id, categoryIds);
-  return res.status(201).json(cadastro);
+  const token = getToken(authorization); 
+
+  const register = await postService.registerPost(verify, token.data.id);
+  return res.status(201).json(register);
 };
 
-const exibePosts = async (_req, res) => {
-  const result = await postService.everyInfo();
+const getPosts = async (_req, res) => {
+  const result = await postService.getPosts();
   return res.status(200).json(result);
 };
  
-const exibeIdPost = async (req, res) => {
-  const result = await postService.oneInfo(req.params.id);
+const findByIdPost = async (req, res) => {
+  const post = await postService.findOnePost(req.params.id);
 
-  if (!result) {
-    return res.status(404).json({ message: 'Post does not exist' });
+  if (post.status) {
+    const { status, message } = post;
+    return res.status(status).json({ message });
   }
 
-  return res.status(200).json(result);
+  return res.status(200).json(post);
 }; 
 
-const alterar = async (req, res) => {
-  const { authorization } = req.headers;
-  const token = jwt.verify(authorization, process.env.JWT_SECRET);
-  const validaUsuario = await postService.validaUsuario(token.data.id, req.params.id);
+const modifyPost = async (req, res) => {
+  const post = await postService.modifyPost(req.body, req.params.id);
 
-  if (!validaUsuario) {
-    return res.status(401).json({ message: 'Unauthorized user' });
+  if (post.status) {
+    const { status, message } = post;
+    return res.status(status).json({ message });
   }
 
-  const result = await postService.alteraInfoPost(req.body, req.params.id);
-
-  if (!result) {
-    return res.status(400).json({ message: 'Some required fields are missing' });
-  }
-
-  return res.status(200).json(result);
+  return res.status(200).json(post);
 };
 
 const deletePost = async (req, res) => {
-  const { authorization } = req.headers;
-  const token = jwt.verify(authorization, process.env.JWT_SECRET);
-  const validaUsuario = await postService.validaUsuario(token.data.id, req.params.id);
-
-  if (validaUsuario.status) {
-    return res.status(validaUsuario.status).json({ message: 'Post does not exist' });
-  }
-
-  if (!validaUsuario) {
-    return res.status(401).json({ message: 'Unauthorized user' });
-  }
-
   const { id } = req.params;
-  await postService.Delet(id);
-    return res.status(204).end();
+  await postService.deletePost(id);
+
+  return res.status(204).end();
+};
+
+const searchPost = async (req, res) => {
+  const { q } = req.query;
+  const query = postService.searchPost(q);
+  return res.status(200).json(query);
 };
 
 module.exports = {
-  cadastrarPost,
-  exibePosts,
-  exibeIdPost,
-  alterar,
+  registerPost,
+  getPosts,
+  findByIdPost,
+  modifyPost,
   deletePost,
+  searchPost,
 };

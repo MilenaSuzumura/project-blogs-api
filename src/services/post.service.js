@@ -1,175 +1,103 @@
-const Joi = require('joi');
-const { BlogPost, Category, PostCategory, User } = require('../models');
+const {
+  verifyParametersPost,
+  verifyArrayCategory,
+  verifyModifyPost,
+} = require('../utils/verify/verify.post');
+const { findCategoryId } = require('../callModel/category.callModel');
+const { findByIdPostsCategories } = require('../callModel/postCategory.callModel');
+const { findById } = require('../callModel/user.callModel');
+const {
+  registerBlogPost,
+  getAllPosts,
+  findPostsId,
+  modify,
+  deleteBlogPost,
+  search,
+} = require('../callModel/blogPost.callModel');
 
-const schema = Joi.object({
-  title: Joi.string().required()
-    .messages({
-      'string.empty': 'Some required fields are missing',
-    }),
-  content: Joi.string().required()
-    .messages({
-      'string.empty': 'Some required fields are missing',
-    }),
-    categoryIds: Joi.array().min(1).required()
-    .messages({
-      'any.required': 'Some required fields are missing',
-      'string.min': 'one or more "categoryIds" not found',
-    }),
-});
+const verifyParameters = async (info) => {
+  const verify = verifyParametersPost(info);
 
-const verificaAlteracao = Joi.object({
-  title: Joi.string().required(),
-  content: Joi.string().required(),
-});
-
- const findCategoryId = async (id) => {
-  const result = await Category.findByPk(id);
-  return result;
-};
-
-const verificaCategoryId = async (arrayCategory) => {
-  const mapValue = await Promise.all(arrayCategory
-    .map((categoryId) => findCategoryId(categoryId)));
-  const everyValue = mapValue.every((category) => Boolean(category));
-  return everyValue;
-};
-
-const verificaParametros = async (info) => {
-  const { error, value } = schema.validate(info);
-  if (error) {
-    return {
-      status: 400,
-      message: error.message,
-    };
+  if (verify.message) {
+    return verify;
   }
 
-  const mapValue = await verificaCategoryId(value.categoryIds);
-
-  if (!mapValue) {
-    return {
-      status: 400,
-      message: 'one or more "categoryIds" not found',
-    };
-  }
-
-  return value;
+  const validateCategory = await verifyArrayCategory(verify);
+  return validateCategory;
 };
 
-const cadastraPostCategory = async (postId, categoryId) => {
-  await PostCategory.create({ postId, categoryId });
+const registerPost = async (infoPost, userId) => {
+  const { title, content, categoryIds } = infoPost;
+  const register = registerBlogPost(title, content, userId, categoryIds);
+  return register;
 };
 
-const cadastrarPost = async (title, content, userId, categoryId) => {
-  const category = await BlogPost.create({ title, content, userId });
-  await Promise.all(categoryId
-    .map((id) => cadastraPostCategory(category.dataValues.id, id)));
-  return category.dataValues;
-};
-
-const everyPosts = async () => {
-  const users = await BlogPost.findAll();
-  return users;
-};
-
-const findPostsCategories = async (postId) => {
-  const postArray = await PostCategory.findAll({
-    where: { postId },
-  });
-  return postArray;
-};
-
-const findById = async (id) => {
-  const user = await User.findOne({
-    where: { id },
-    attributes: { exclude: ['password'] },
-  });
-  return user;
-};
-
-const everyInfo = async () => {
-  const posts = await everyPosts();
-
+const listPost = async (posts) => {
   const mapRest = await Promise.all(posts.map(async (post) => {
-    const { userId, id } = post.dataValues;
+    const { userId, id } = post;
 
-    const { dataValues } = await findById(userId);
-    const categoriesInfo = await findPostsCategories(id);
-    const mapCategories = await Promise.all(categoriesInfo
-      .map((info) => findCategoryId(info.dataValues.categoryId)));
-    const newPost = { ...post.dataValues,
-      user: dataValues,
-      categories: mapCategories };
+    const user = await findById(userId);
+    const postCategories = await findByIdPostsCategories(id);
+    const categories = await Promise.all(postCategories
+      .map((postCategory) => findCategoryId(postCategory.categoryId)));
+    const newPost = {
+      ...post,
+      user,
+      categories,
+    };
     return newPost;
   }));
+
   return mapRest;
 };
 
-const findPostsId = async (id) => {
-  const postArray = await BlogPost.findOne({
-    where: { id },
-  });
-  return postArray;
+const getPosts = async () => {
+  const posts = await getAllPosts();
+  const allPosts = await listPost(posts);
+  return allPosts;
 };
 
-const oneInfo = async (id) => {
+const findOnePost = async (idString) => {
+  const id = parseInt(idString, 10);
   const post = await findPostsId(id);
 
   if (!post) {
-    return post;
+    return { status: 404, message: 'Post does not exist' };
   }
 
-  const { dataValues } = await findById(post.userId);
-  const categoriesInfo = await findPostsCategories(id);
-  const mapCategories = await Promise.all(categoriesInfo
-    .map((info) => findCategoryId(info.dataValues.categoryId)));
-  const newPost = { ...post.dataValues,
-    user: dataValues,
-    categories: mapCategories };
-  return newPost;
+  const findPost = await listPost([post]);
+  return findPost[0];
 };
 
-const validaUsuario = async (idUser, idPost) => {
-  const teste = await findPostsId(idPost);
+const modifyPost = async (info, idPost) => {
+  const verify = verifyModifyPost(info);
 
-  if (!teste) {
-    return {
-      status: 404,
-    };
-  }
+  if (verify.status) return verify;
 
-  const { userId } = teste.dataValues;
-  if (idUser !== userId) {
-    return false;
-  }
-  return true;
+  await modify(idPost, verify);
+
+  const otherInfoPost = await findOnePost(idPost);
+  const post = await findPostsId(idPost);
+  return { ...post, ...otherInfoPost };
 };
 
-const alteraInfoPost = async (info, idPost) => {
-  const { error, value } = verificaAlteracao.validate(info);
-
-  if (error) {
-    return false;
-  }
-
-  await BlogPost.update({ ...value }, {
-    where: { id: idPost },
-  });
-
-  const altera = await oneInfo(idPost);
-  return altera;
-};
-
-const Delet = async (idString) => {
+const deletePost = async (idString) => {
   const id = Number(idString);
-  await BlogPost.destroy({ where: { id } });
+  await deleteBlogPost(id);
+};
+
+const searchPost = async (query) => {
+  const infoPost = await search(query);
+  const allInfo = await listPost(infoPost);
+  return allInfo;
 };
 
 module.exports = {
-  verificaParametros,
-  cadastrarPost,
-  everyInfo,
-  oneInfo,
-  validaUsuario,
-  alteraInfoPost,
-  Delet,
+  verifyParameters,
+  registerPost,
+  getPosts,
+  findOnePost,
+  modifyPost,
+  deletePost,
+  searchPost,
 };
