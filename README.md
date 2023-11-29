@@ -16,6 +16,32 @@ Blogs API é um projeto focado em desenvolver uma API e um banco de dados para a
 * Docker;
 * MySQL;
 
+## Rotas, entradas e saídas
+
+<details>
+<summary>Endpoint POST `/login`</summary><br />
+Utilizado para quando o usuário vai acessar sua conta. O banco de dados exige que o usuário insira o email e senha correta e irá retornar um token temporário como confirmação de que está correto.
+
+##### Exemplo de entrada:
+<img alt="imagem-exemplo-de-entrada-correta-post-login" src="/images-readme/post-login-exemplo-de-entrada.png">
+
+##### Exemplo de saída:
+<img alt="imagem-exemplo-de-saída-correta-post-login" src="/images-readme/post-login-exemplo-de-saida.png">
+
+</details>
+
+
+##### Forma de inserir:
+```
+{
+  "email": "lewishamilton@gmail.com",
+  "password": "123456"
+}
+```
+
+#### Exemplo de entrada e saída correta:
+
+
 ## Utilizando o docker
 Para criar os containers, execute: `docker-compose up -d`
 Para abrir o terminar do container, execute: `docker exec -it blogs_api bash`
