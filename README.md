@@ -28,6 +28,23 @@ Utilizado para quando o usuário vai acessar sua conta. O banco de dados exige q
 ##### Exemplo de saída:
 <img alt="imagem-exemplo-de-saída-correta-post-login" src="/images-readme/post-login-exemplo-de-saida.png">
 
+#### Inserindo informações incorretas
+Existem dois cenários onde a saída acima pode não ser retornada: caso o email ou/e senha estejam incorretas e caso falte uma das duas informações. Ambas possuem retornos diferentes.
+
+Retorno para email ou/e senha incorretas:
+```
+{
+  "message": "Invalid fields"
+}
+```
+
+Retorno para caso falte alguma das duas informações:
+```
+{
+  "message": "Some required fields are missing"
+}
+```
+
 </details>
 
 
