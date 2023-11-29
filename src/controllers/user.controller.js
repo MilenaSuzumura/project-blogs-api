@@ -19,7 +19,7 @@ const getAllUsers = async (_req, res) => {
 };
 
 const getOneUser = async (req, res) => {
-  const result = await userService.getOneUsers(req.params.id);
+  const result = await userService.getOneUser(req.params.id);
   const { status, message } = result;
   return res.status(status).json(message);
 };

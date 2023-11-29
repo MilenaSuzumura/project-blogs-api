@@ -1,8 +1,9 @@
 const { Category } = require('../models');
 
 const registerCategory = async (info) => {
-  const category = await Category.create({ ...info });
-  return category;
+  const category = await Category.create(info);
+  const correctCategory = await Category.findOne({ raw: true, where: { id: category.null } });
+  return correctCategory;
 };
 
 const getAllCategory = async () => {
