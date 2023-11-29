@@ -131,6 +131,49 @@ Utilizado para retornar as informações do usuário com o id que está no url q
 
 </details>
 
+<details>
+<summary>Endpoint POST /categories</summary><br />
+Utilizado para criar uma nova categoria. Para isso, necessita de um nome e de um token valido. Caso as informações estejam corretas, retornara as informações da nova categoria.
+
+##### Exemplo de entrada:
+<img alt="imagem-exemplo-de-entrada-correta-post-categories" src="/images-readme/post-categories-exemplo-entrada.png">
+
+##### Exemplo de saída:
+<img alt="imagem-exemplo-de-saida-correta-post-categories" src="/images-readme/post-categories-exemplo-saida.png">
+
+#### Inserindo informações incorretas
+Existem quatro cenários onde a saída acima pode não ser retornada: não conter o nome da categoria, a string name estar vazia, caso não tenha o token e um token invalido.
+
+<strong>Exemplo caso não contenha o name:</strong>
+```
+{
+  "message": "\"name\" is required"
+}
+```
+
+<strong>Exemplo caso name seja uma string vazia:</strong>
+```
+{
+  "message": "\"name\" is not allowed to be empty"
+}
+```
+
+<strong>Exemplo caso não contenha o token:</strong>
+```
+{
+  "message": "Token not found"
+}
+```
+
+<strong>Exemplo caso o token tenha expirado ou seja inválido:</strong>
+```
+{
+  "message": "Expired or invalid token"
+}
+```
+
+</details>
+
 <!-- 
 <details>
 <summary></summary><br />
