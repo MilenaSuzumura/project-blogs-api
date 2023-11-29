@@ -82,7 +82,38 @@ Existem dois cenários onde a saída acima pode não ser retornada: caso não pr
 
 </details>
 
-<!-- <details>
+<details>
+<summary>Endpoint GET /user</summary><br />
+Utilizado para retornar todos os usuários que contém no banco de dados, porém é necessário ter um token para isso.
+
+##### Exemplo de entrada:
+<img alt="imagem-exemplo-de-entrada-correta-get-user" src="/images-readme/get-user-exemplo-de-entrada.png">
+
+##### Exemplo de saída:
+<img alt="imagem-exemplo-de-saida-correta-get-user" src="/images-readme/get-user-exemplo-de-saida.png">
+
+
+#### Inserindo informações incorretas
+Existem duas formas para o banco de dados não ser acessado. Não contendo um token ou tendo um token inválido.
+
+<strong>Exemplo caso não contenha o token:</strong>
+```
+{
+  "message": "Token not found"
+}
+```
+
+<strong>Exemplo caso o token tenha expirado ou seja inválido:</strong>
+```
+{
+  "message": "Expired or invalid token"
+}
+```
+
+</details>
+
+<!-- 
+<details>
 <summary></summary><br />
 
 ##### Exemplo de entrada:
@@ -93,18 +124,8 @@ Existem dois cenários onde a saída acima pode não ser retornada: caso não pr
 #### Inserindo informações incorretas
 
 
-</details> -->
-
-
-##### Forma de inserir:
-```
-{
-  "email": "lewishamilton@gmail.com",
-  "password": "123456"
-}
-```
-
-#### Exemplo de entrada e saída correta:
+</details>
+-->
 
 
 ## Utilizando o docker
