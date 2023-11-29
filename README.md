@@ -122,10 +122,24 @@ Utilizado para retornar as informações do usuário com o id que está no url q
 ##### Exemplo de saída:
 <img alt="imagem-exemplo-de-saida-correta-get-user-id" src="/images-readme/get-user-id-exemplo-resposta.png">
 
-<strong>Caso não exista o id no banco de dados, o retorno será:</strong>
+<strong>Caso não exista usuário com aquele id no banco de dados, o retorno será:</strong>
 ```
 {
   "message": "User does not exist"
+}
+```
+
+<strong>Exemplo caso não contenha o token:</strong>
+```
+{
+  "message": "Token not found"
+}
+```
+
+<strong>Exemplo caso o token tenha expirado ou seja inválido:</strong>
+```
+{
+  "message": "Expired or invalid token"
 }
 ```
 
@@ -182,7 +196,7 @@ Utilizado para retornar as informações de todas as categorias que contém no b
 <img alt="imagem-exemplo-de-entrada-correta-get-categories" src="/images-readme/get-categories-exemplo-entrada.png">
 
 ##### Exemplo de saída:
-<img alt="imagem-exemplo-de-entrada-correta-get-categories" src="/images-readme/get-categories-exemplo-saida.png">
+<img alt="imagem-exemplo-de-saida-correta-get-categories" src="/images-readme/get-categories-exemplo-saida.png">
 
 #### Inserindo informações incorretas
 Existem dois cenários onde a saída acima pode não ser retornada: caso não tenha o token e um token invalido.
@@ -203,20 +217,124 @@ Existem dois cenários onde a saída acima pode não ser retornada: caso não te
 
 </details>
 
-<!-- 
 <details>
-<summary></summary><br />
+<summary>Endpoint POST /post</summary><br />
+Utilizado para criar um novo post. Para isso, necessita de um nome, email, senha e uma imagem. Assim como o login, retornará um token caso todas as informações enviadas foram validadas corretamente.
+
+##### Informações necessárias:
+* <strong>title:</strong> É o título do post e deve ser enviado como string. É obrigatório.
+* <strong>content:</strong> É o conteúdo do post e deve ser enviado como string. É obrigatório.
+* <strong>categoryIds:</strong> É um array de números com as categorias ao qual o post pertence e precisa ter pelo menos 1 id de categoria. É obrigatório.
 
 ##### Exemplo de entrada:
+<img alt="imagem-exemplo-de-entrada-correta-post-post" src="/images-readme/post-post-exemplo-entrada.png">
 
 ##### Exemplo de saída:
+<img alt="imagem-exemplo-de-saida-correta-post-post" src="/images-readme/post-post-exemplo-saida.png">
+
+#### Inserindo informações incorretas
+Existem dois cenários onde a saída acima pode não ser retornada: caso não preencha os requisitos necessários(explicados nas Informações Necessárias acima) e caso falte alguma das informações obrigatórias. Cada um deles terá uma mensagem diferente avisando o motivo de estar incorreta.
+
+<strong>Exemplo caso não preencha os requisitos necessários:</strong>
+```
+{
+  "message": "Some required fields are missing"
+}
+```
+
+<strong>Exemplo caso esteja faltando alguma das informações obrigatórias</strong>
+```
+{
+  "message": "\"content\" is required"
+}
+```
+
+##### Além disso, pode ter os erros do token.
+
+<strong>Exemplo caso não contenha o token:</strong>
+```
+{
+  "message": "Token not found"
+}
+```
+
+<strong>Exemplo caso o token tenha expirado ou seja inválido:</strong>
+```
+{
+  "message": "Expired or invalid token"
+}
+```
+
+</details>
+
+</details>
+
+<details>
+<summary>Endpoint GET /post</summary><br />
+Utilizado para retornar as informações de todas as postagens que contém no banco de dados, porém é necessário ter um token para isso.
+
+##### Exemplo de entrada:
+<img alt="imagem-exemplo-de-entrada-correta-get-post" src="/images-readme/get-post-exemplo-entrada.png">
+
+##### Exemplo de saída:
+<img alt="imagem-exemplo-de-saida-correta-get-post" src="/images-readme/get-post-exemplo-saida.png">
 
 
 #### Inserindo informações incorretas
+Existem dois cenários onde a saída acima pode não ser retornada: caso não tenha o token e um token invalido.
 
+<strong>Exemplo caso não contenha o token:</strong>
+```
+{
+  "message": "Token not found"
+}
+```
+
+<strong>Exemplo caso o token tenha expirado ou seja inválido:</strong>
+```
+{
+  "message": "Expired or invalid token"
+}
+```
 
 </details>
--->
+
+<details>
+<summary>Endpoint GET /post/:id</summary><br />
+Utilizado para retornar as informações das postagens com o id que está no url que contém no banco de dados, porém é necessário ter um token para isso.
+
+##### Exemplo de entrada:
+<img alt="imagem-exemplo-de-entrada-correta-get-post-id" src="/images-readme/get-post-id-exemplo-entrada.png">
+
+##### Exemplo de saída:
+<img alt="imagem-exemplo-de-saida-correta-get-post-id" src="/images-readme/get-post-id-exemplo-saida.png">
+
+
+#### Inserindo informações incorretas
+Existem três cenários onde a saída acima pode não ser retornada: caso não exista post com aquele id, não tenha o token e um token invalido.
+
+<strong>Caso não exista post com aquele no banco de dados, o retorno será:</strong>
+```
+{
+  "message": "Post does not exist"
+}
+```
+
+<strong>Exemplo caso não contenha o token:</strong>
+```
+{
+  "message": "Token not found"
+}
+```
+
+<strong>Exemplo caso o token tenha expirado ou seja inválido:</strong>
+```
+{
+  "message": "Expired or invalid token"
+}
+```
+
+</details>
 
 
 ## Utilizando o docker
@@ -251,37 +369,3 @@ exemplo:
 Para rodar os testes de cobertura:
 
   `npm run test:coverage` -->
-
-## Função de cada Função
-* <strong>getSpeciesByIds:</strong> Busca as espécies dos animais por meio de um id e retorna um array contendo todos os animais dessa espécie.
-
-* <strong>getAnimalsOlderThan:</strong> Ao receber uma espécie e uma idade como parâmetro, retorna se todos os animais dessa espécie possuem essa idade ou são mais velhos.
-
-* <strong>getEmployeeByName:</strong> Busca as pessoas colaboradoras pelo primeiro ou último nome delas.
-
-* <strong>countAnimals:</strong> Conta a quantidade de espécies de animais residentes no zoológico
-
-* <strong>calculateEntry:</strong> Calcula o valor total da entrada dos visitantes do zoológico
-
-* <strong>getSchedule:</strong> Retorna um cronograma com os horários de visita disponíveis para cada espécie de animal
-
-* <strong>getOldestFromFirstSpecies:</strong> Encontra o animal mais velho de uma espécie que é gerenciado por uma pessoa colaboradora
-
-* <strong>getEmployeesCoverage:</strong> Busca as informações sobre a pessoa colaboradora e por quais espécies ela é responsável
-
-* <strong>getAnimalMap:</strong> Faz o mapeamento geográfico dos animais de cada espécie e realiza filtros de localização, nome em ordem alfabética e sexo.
-
-#### Funções que foram criados apenas os testes:
-* <strong>handlerElephants:</strong> Retorna informações dos elefantes referente ao argumento que foi passado como parâmetro
-
-|   Argumento    | Informação                                                                    |
-|     :---:      | :---                                                                          |
-|    `count`     | retorna a quantidade de elefantes                                             |
-|    `names`     | retorna um array com a relação dos nomes de todos os elefantes                |
-|  `averageAge`  | retorna a média de idade dos elefantes                                        |
-|   `location`   | retorna a localização dos elefantes dentro do Zoológico                       |
-|  `popularity`  | retorna a popularidade dos elefantes                                          |
-| `availability` | retorna um array com a relação de dias em que é possível visitar os elefantes |
-
-
-* <strong>getOpeningHours:</strong> Mostra os horários abertos do zoológico de cada dia da semana.
