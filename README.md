@@ -84,7 +84,7 @@ Existem dois cenários onde a saída acima pode não ser retornada: caso não pr
 
 <details>
 <summary>Endpoint GET /user</summary><br />
-Utilizado para retornar todos os usuários que contém no banco de dados, porém é necessário ter um token para isso.
+Utilizado para retornar as informações de todos os usuários que contém no banco de dados, porém é necessário ter um token para isso.
 
 ##### Exemplo de entrada:
 <img alt="imagem-exemplo-de-entrada-correta-get-user" src="/images-readme/get-user-exemplo-de-entrada.png">
@@ -107,6 +107,25 @@ Existem duas formas para o banco de dados não ser acessado. Não contendo um to
 ```
 {
   "message": "Expired or invalid token"
+}
+```
+
+</details>
+
+<details>
+<summary>Endpoint GET /user/:id</summary><br />
+Utilizado para retornar as informações do usuário com o id que está no url que contém no banco de dados, porém é necessário ter um token para isso.
+
+##### Exemplo de entrada:
+<img alt="imagem-exemplo-de-entrada-correta-get-user-id" src="/images-readme/get-user-id-exemplo-de-entrada.png">
+
+##### Exemplo de saída:
+<img alt="imagem-exemplo-de-saida-correta-get-user-id" src="/images-readme/get-user-id-exemplo-resposta.png">
+
+<strong>Caso não exista o id no banco de dados, o retorno será:</strong>
+```
+{
+  "message": "User does not exist"
 }
 ```
 
