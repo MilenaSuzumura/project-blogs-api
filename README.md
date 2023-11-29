@@ -174,6 +174,35 @@ Existem quatro cenários onde a saída acima pode não ser retornada: não conte
 
 </details>
 
+<details>
+<summary>Endpoint GET /categories</summary><br />
+Utilizado para retornar as informações de todas as categorias que contém no banco de dados, porém é necessário ter um token para isso.
+
+##### Exemplo de entrada:
+<img alt="imagem-exemplo-de-entrada-correta-get-categories" src="/images-readme/get-categories-exemplo-entrada.png">
+
+##### Exemplo de saída:
+<img alt="imagem-exemplo-de-entrada-correta-get-categories" src="/images-readme/get-categories-exemplo-saida.png">
+
+#### Inserindo informações incorretas
+Existem dois cenários onde a saída acima pode não ser retornada: caso não tenha o token e um token invalido.
+
+<strong>Exemplo caso não contenha o token:</strong>
+```
+{
+  "message": "Token not found"
+}
+```
+
+<strong>Exemplo caso o token tenha expirado ou seja inválido:</strong>
+```
+{
+  "message": "Expired or invalid token"
+}
+```
+
+</details>
+
 <!-- 
 <details>
 <summary></summary><br />
