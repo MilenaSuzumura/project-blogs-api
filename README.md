@@ -339,6 +339,7 @@ Existem três cenários onde a saída acima pode não ser retornada: caso não e
 
 ## Utilizando o docker
 Para criar os containers, execute: `docker-compose up -d`
+
 Para abrir o terminar do container, execute: `docker exec -it blogs_api bash`
 
 ## Instalando Dependências
@@ -346,6 +347,7 @@ Para abrir o terminar do container, execute: `docker exec -it blogs_api bash`
 
 ## Banco de dados
 Para criar o banco de dados, execute: `npm run prestart`
+
 Para popular o banco de dados: `npm run seed`
 
 ## Aplicação Node:
