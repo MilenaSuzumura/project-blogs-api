@@ -21,8 +21,7 @@
     "mysql2": "^2.3.3",
     "sequelize": "^6.25.6",
     "shelljs": "0.8.4",
-    "sinon": "^17.0.1",
-    "superagent": "^8.1.2"
+    "sinon": "^17.0.1"
   },
   "main": "src/server.js",
   "scripts": {
