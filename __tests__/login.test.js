@@ -13,7 +13,7 @@ chai.use(chaiHttp);
 
 const { allUsers }= require('./mocks/user');
 
-describe('Teste de Login', () => {
+describe('Teste a rota /login', () => {
   beforeEach(() => sinon.restore());
 
    it('Testa se o usuario consegue logar em sua conta', async function () {
