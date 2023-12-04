@@ -15,9 +15,10 @@ const allUsers = [
   },
 ];
 
-const oneUserEmailPassword = {
-  email: 'lewishamilton@gmail.com',
+const newUser = {
+  displayName: 'Milena Suzumura',
+  email: 'milena.suzumura11@gmail.com',
   password: '123456',
-}
+};
 
-module.exports = { allUsers }
+module.exports = { allUsers, newUser }

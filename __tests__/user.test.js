@@ -11,7 +11,7 @@ const { Model } = require('sequelize');
 
 chai.use(chaiHttp);
 
-const { allUsers } = require('./mocks/user');
+const { allUsers, newUser } = require('./mocks/user');
 const {
   Authorization,
   invalidToken,
@@ -22,9 +22,12 @@ describe('Teste a rota /user', () => {
   beforeEach(() => sinon.restore());
 
   it('Testa se a rota post /user cria um novo usuario', async function () {
-    sinon.stub(Model, 'create').resolves(allUsers[0]);
+    sinon.stub(Model, 'create').resolves(newUser);
 
-    const response = await (chai.request(app).post('/user').send(allUsers[0]))
+    const response = await (chai.request(app).post('/user').send(newUser))
+
+    expect(response.status).to.be.equal(201);
+    expect(response.body).to.be.haveOwnProperty('token');
   });
 
   it('Testa se a rota get /user retorna todos os usuarios', async function () {
