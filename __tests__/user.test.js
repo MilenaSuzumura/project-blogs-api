@@ -91,6 +91,17 @@ describe('Teste a rota /user', () => {
     expect(response.status).to.be.equal(401);
     expect(response.body).to.deep.equal(messageInvalidToken);
   });
+
+  it('Testa se a rota delete /user/me deleta o usuario', async function () {
+    sinon.stub(Model, 'destroy').resolves(null);
+
+    const response = await (chai.request(app).delete('/user/me').set({
+      Authorization,
+    }));
+
+    expect(response.status).to.be.equal(204);
+    expect(response.body).to.deep.equal({});
+  });
 })
 
 /*    
