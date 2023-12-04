@@ -10,7 +10,7 @@ const login = async (email, password) => {
 
   if (verify) return verify;
   
-  const { password: _, ...userWithoutPassword } = user.dataValues;
+  const { password: _, ...userWithoutPassword } = user;
   const token = createToken(userWithoutPassword);
 
   return {

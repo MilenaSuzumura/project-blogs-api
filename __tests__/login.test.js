@@ -7,13 +7,18 @@ const app = require('../src/app');
 chai.use(chaiHttp);
 
 const { expect } = chai;
+const { Model } = require('sequelize');
 
 chai.use(chaiHttp);
 
-beforeEach(() => sinon.restore());
+const { allUsers }= require('./mocks/user');
 
 describe('Teste de Login', () => {
+  beforeEach(() => sinon.restore());
+
    it('Testa se o usuario consegue logar em sua conta', async function () {
+    sinon.stub(Model, 'findOne').resolves(allUsers[0]);
+
     const response = await (chai.request(app).post('/login').send({
       email: 'lewishamilton@gmail.com',
       password: '123456'
@@ -34,6 +39,8 @@ describe('Teste de Login', () => {
   });
 
   it('Testa se o usuario não consegue logar em sua conta sem informar a senha', async function () {
+    sinon.stub(Model, 'findOne').resolves(null);
+
     const response = await (chai.request(app).post('/login').send({
       email: 'lewishamilton@gmail.com',
       password: ''
@@ -44,6 +51,8 @@ describe('Teste de Login', () => {
   });
 
   it('Testa se o usuario não consegue logar em sua conta sem o email correto', async function () {
+    sinon.stub(Model, 'findOne').resolves(null);
+
     const response = await (chai.request(app).post('/login').send({
       email: 'sadlasda@admin.com',
       password: '123456'
@@ -54,6 +63,8 @@ describe('Teste de Login', () => {
   });
 
   it('Testa se o usuario não consegue logar em sua conta sem informar a senha', async function () {
+    sinon.stub(Model, 'findOne').resolves(null);
+
     const response = await (chai.request(app).post('/login').send({
       email: 'lewishamilton@gmail.com',
       password: 'ssadjasjdj'
