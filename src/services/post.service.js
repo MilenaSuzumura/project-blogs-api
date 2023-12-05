@@ -53,8 +53,7 @@ const listPost = async (posts) => {
 
 const getPosts = async () => {
   const posts = await getAllPosts();
-  const allPosts = await listPost(posts);
-  return allPosts;
+  return posts;
 };
 
 const findOnePost = async (idString) => {
@@ -65,8 +64,7 @@ const findOnePost = async (idString) => {
     return { status: 404, message: 'Post does not exist' };
   }
 
-  const findPost = await listPost([post]);
-  return findPost[0];
+  return post;
 };
 
 const modifyPost = async (info, idPost) => {
