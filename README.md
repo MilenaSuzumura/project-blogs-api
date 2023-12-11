@@ -6,7 +6,6 @@ Blogs API é um projeto focado em desenvolver uma API e um banco de dados para a
 
 ## Técnologias usadas
 * JavaScript;
-* Higher Order Functions;
 * Node.js;
 * Express.js;
 * Sequelize.js;
