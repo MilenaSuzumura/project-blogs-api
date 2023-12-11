@@ -336,6 +336,7 @@ Existem três cenários onde a saída acima pode não ser retornada: caso não e
 
 </details>
 
+OBS: Existe o Endpoint GET /search, porém não funciona.
 
 ## Utilizando o docker
 Para criar os containers, execute: `docker-compose up -d`
@@ -354,7 +355,7 @@ Para popular o banco de dados: `npm run seed`
 Para executar a aplicação e acessar as rotas, execute: `npm run debug`
 
 
-<!-- ## Executando Testes
+## Executando Testes
 Para rodar todos os testes:
 
   `npm test`
@@ -362,12 +363,10 @@ Para rodar todos os testes:
 
 Para rodar um teste específico:
 
-  `npm test nomeDaFunção`
+  `npm test nomeDoArquivo`
 
 exemplo:
-`npm test getEmployeesCoverage`
+`npm test post`
 
 
-Para rodar os testes de cobertura:
-
-  `npm run test:coverage` -->
+OBS: Os testes irão rodar com os testes de cobertura

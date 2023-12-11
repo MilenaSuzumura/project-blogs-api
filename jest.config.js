@@ -6,7 +6,7 @@
 /** @type {import('jest').Config} */
 const config = {
   bail: true,
-  "verbose": true,
+  verbose: true,
 
   // All imported modules in your tests should be mocked automatically
   // automock: false,
