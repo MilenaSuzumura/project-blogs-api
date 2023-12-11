@@ -1,16 +1,23 @@
 const { Op } = require('sequelize');
-const { BlogPost } = require('../models');
+const { BlogPost, User, Category } = require('../models');
 const { registerPostCategory } = require('./postCategory.callModel');
 
 const registerBlogPost = async (title, content, userId, categoryId) => {
   const category = await BlogPost.create({ title, content, userId });
   await Promise.all(categoryId
-    .map((id) => registerPostCategory(category.dataValues.id, id)));
-  return category.dataValues;
+    .map((id) => registerPostCategory(category.id, id)));
+  return category;
 };
 
 const getAllPosts = async () => {
-  const posts = await BlogPost.findAll({ raw: true });
+  const posts = await BlogPost.findAll({
+    raw: true,
+    nest: true,
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories', through: { attributes: [] } },
+    ],
+  });
   return posts;
 };
 
@@ -18,7 +25,12 @@ const findPostsId = async (id) => {
   const postArray = await BlogPost.findOne({
     raw: true,
     where: { id },
-  });
+    nest: true,
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories', through: { attributes: [] } },
+    ],
+});
 
   return postArray;
 };

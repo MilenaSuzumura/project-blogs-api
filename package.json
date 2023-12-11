@@ -4,9 +4,14 @@
   "engines": {
     "node": ">=16.0.0"
   },
+  "jest": {
+    "verbose": true
+  },
   "engineStrict": true,
   "private": true,
   "dependencies": {
+    "chai": "^4.3.10",
+    "chai-http": "^4.4.0",
     "dotenv": "^8.6.0",
     "express": "4.17.1",
     "express-async-errors": "3.1.1",
@@ -15,7 +20,8 @@
     "morgan": "1.10.0",
     "mysql2": "^2.3.3",
     "sequelize": "^6.25.6",
-    "shelljs": "0.8.4"
+    "shelljs": "0.8.4",
+    "sinon": "^17.0.1"
   },
   "main": "src/server.js",
   "scripts": {
@@ -26,10 +32,9 @@
     "drop": "npx sequelize-cli db:drop",
     "seed": "npx sequelize-cli db:seed:all",
     "pretest": "(npm run kill:test && NODE_ENV=test npm run start:test) &",
-    "test": "npx -y wait-on -t 300000 http://localhost:3030 && NODE_ENV=test API_PORT=3030 jest -i --verbose --forceExit",
+    "test": "jest",
     "test:dev": "npx -y wait-on -t 300000 http://localhost:3000 && NODE_ENV=development API_PORT=3000 jest -i --verbose --forceExit",
     "posttest": "npm run kill:test",
-    "test-coverage": "jest -i --verbose --forceExit --coverage",
     "debug": "nodemon .",
     "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json ."
   },
