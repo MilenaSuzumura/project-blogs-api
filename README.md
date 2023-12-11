@@ -336,7 +336,7 @@ Existem três cenários onde a saída acima pode não ser retornada: caso não e
 
 </details>
 
-OBS: Existe o Endpoint GET /search, porém não funciona.
+<strong>OBS:</strong> Existe o Endpoint GET /search, porém não funciona.
 
 ## Utilizando o docker
 Para criar os containers, execute: `docker-compose up -d`
@@ -369,4 +369,4 @@ exemplo:
 `npm test post`
 
 
-OBS: Os testes irão rodar com os testes de cobertura
+<strong>OBS:</strong> Os testes irão rodar com os testes de cobertura
