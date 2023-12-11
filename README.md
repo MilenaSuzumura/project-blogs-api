@@ -15,6 +15,11 @@ Blogs API é um projeto focado em desenvolver uma API e um banco de dados para a
 * Joi;
 * Docker;
 * MySQL;
+* Jest;
+* Mock;
+* Sinon;
+* Chai;
+* Chai-http.
 
 ## Rotas, entradas e saídas
 
