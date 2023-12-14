@@ -364,14 +364,14 @@ Para rodar todos os testes:
 
   `npm test`
 
-
+<!-- 
 Para rodar um teste específico:
 
   `npm test nomeDoArquivo`
 
 exemplo:
 `npm test post`
-
+ -->
 
 
 <strong>OBS:</strong> Os testes irão rodar com os testes de cobertura
